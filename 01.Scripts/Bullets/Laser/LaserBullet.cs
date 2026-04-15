@@ -1,0 +1,46 @@
+using LCM._01.Scripts;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace KHG.Bullets
+{
+    public class LaserBullet : Bullet
+    {
+        public UnityEvent ActiveEvent;
+        public float rotation
+        {
+            get => transform.rotation.z;
+            set => transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, value);
+        }
+        private bool _damageable = false;
+
+        private Pool _laserPool;
+
+        public void OnDamageStart() => _damageable = true;
+        public void OnDamageEnd() => _damageable = false;
+        public void DestroySelf()
+        {
+            _damageable = false;
+            if (_laserPool != null) _laserPool.Push(this);
+            else Destroy(gameObject);
+        }
+        public void OnActivated() => ActiveEvent?.Invoke();
+
+        protected override void OnTriggerEnter2D(Collider2D other)
+        {
+            if (_damageable == true)
+                ApplyDamage(other);
+        }
+        public override void ResetItem()
+        {
+            _damageable = false;
+            transform.rotation = Quaternion.identity;
+        }
+
+        public override void SetUpPool(Pool pool)
+        {
+            _laserPool = pool;
+        }
+    }
+
+}

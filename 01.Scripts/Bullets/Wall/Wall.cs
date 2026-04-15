@@ -1,0 +1,84 @@
+using DG.Tweening;
+using LCM._01.Scripts;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace KHG.Obstacles
+{
+    public class WallGen : Bullet
+    {
+        [SerializeField] private GameObject wallObj;
+        [SerializeField] private SpriteRenderer _warnRenderer;
+
+        public bool UseAutoSpawn = true;
+        public Vector3 SpawnVector { get; set; }
+
+        public UnityEvent OnWallDeployed;
+        public float WarnTime = 1.5f;
+
+        private Pool _wallPool;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if(UseAutoSpawn) transform.position = SpawnVector;
+            wallObj.SetActive(false);
+            _warnRenderer.gameObject.SetActive(false);
+            StartCoroutine(StartCo());
+        }
+
+        private IEnumerator StartCo()
+        {
+            yield return new WaitForSeconds(0.1f);
+            SetWall();
+        }
+
+        public void SetWall()
+        {
+            _warnRenderer.gameObject.SetActive(true);
+            Sequence _seq = DOTween.Sequence();
+            for (int i = 0; i < 2; i++)
+            {
+                _seq.Append(_warnRenderer.DOFade(0.2f, WarnTime / 12));
+                _seq.Append(_warnRenderer.DOFade(0, WarnTime / 12));
+            }
+            _seq.Append(_warnRenderer.DOFade(0.2f, WarnTime / 12));
+            _seq.Append(_warnRenderer.DOFade(0, WarnTime / 12)).OnComplete(() =>
+            {
+                wallObj.SetActive(true);
+                _warnRenderer.gameObject.SetActive(false);
+                wallObj.transform.DOScale(Vector3.one, 0.1f).OnComplete(() => OnWallDeployed?.Invoke());
+            });
+        }
+        public void DestroyWall()
+        {
+            wallObj.GetComponent<SpriteRenderer>().DOFade(0,1f);
+            StartCoroutine(RemoveWall(1f));
+        }
+
+        private IEnumerator RemoveWall(float time)
+        {
+            yield return new WaitForSeconds(time);
+            if (_wallPool != null) _wallPool.Push(this);
+            else Destroy(gameObject);
+        }
+
+        protected override void OnTriggerEnter2D(Collider2D other)
+        {
+            ApplyDamage(other);
+        }
+
+        public override void SetUpPool(Pool pool)
+        {
+            _wallPool = pool;
+        }
+
+        public override void ResetItem()
+        {
+            wallObj.SetActive(false);
+            _warnRenderer.gameObject.SetActive(false);
+            wallObj.GetComponent<SpriteRenderer>().DOFade(1, 0f);
+        }
+    }
+}
