@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "InfinitePatternListSO", menuName = "SO/InfiniteTimeLine/InfinitePatternListSO")]
 public class InfinitePatternListSO : ScriptableObject
 {
-    public List<InfinitePatternSO> patterns = new();
-    private List<int> played = new();
+    public List<InfinitePatternSO> Patterns = new();
+    private List<int> _played = new();
 
     public InfinitePattern GetActiveRandomPattern(List<InfinitePattern> _activePatterns)
     {
@@ -15,21 +15,21 @@ public class InfinitePatternListSO : ScriptableObject
             return null;
         }
 
-        if (played.Count >= _activePatterns.Count)
+        if (_played.Count >= _activePatterns.Count)
         {
-            played.Clear();
+            _played.Clear();
         }
 
         int index = Random.Range(0, _activePatterns.Count);
 
         int safety = 0; // 무한 루프 방지
-        while (played.Contains(index) && safety < 100)
+        while (_played.Contains(index) && safety < 100)
         {
             index = Random.Range(0, _activePatterns.Count);
             safety++;
         }
 
-        played.Add(index);
+        _played.Add(index);
         return _activePatterns[index];
     }
 
@@ -46,7 +46,7 @@ public class InfinitePatternListSO : ScriptableObject
 
         _activePatterns.Clear();
 
-        foreach (var pattern in patterns)
+        foreach (var pattern in Patterns)
         {
             if (pattern == null || pattern.Pattern == null)
             {

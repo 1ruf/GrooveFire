@@ -9,11 +9,11 @@ using UnityEngine;
 
 public class TriangleCanAttack : InfinitePattern
 {
-    [Inject] private InfiniteScoreManager scoreManager;
+    [Inject] private InfiniteScoreManager _scoreManager;
     [SerializeField] private PoolingItemSO triangle;
     [SerializeField] private PoolingItemSO boomBullet;
     [SerializeField] private int spawnCount;
-    private List<Vector2> spawnPos = new List<Vector2>
+    private List<Vector2> _spawnPos = new List<Vector2>
     {
          new Vector2(-12.4f, 7.8f),
          new Vector2(8.3f, -6.2f),
@@ -50,12 +50,13 @@ public class TriangleCanAttack : InfinitePattern
 
         yield return new WaitForSeconds(1.2f);
 
-        for (int i = 0; i < spawnCount; i++)
+        int count = Mathf.Min(spawnCount, _spawnPos.Count);
+        for (int i = 0; i < count; i++)
         {
             ExplodeBullet explodeBullet = _poolManager.Pop<ExplodeBullet>(boomBullet);
 
-            explodeBullet.moveable = true;
-            explodeBullet.targetPosition = spawnPos[i];
+            explodeBullet.Moveable = true;
+            explodeBullet.TargetPosition = _spawnPos[i];
             if (i % 2 == 0)
             {
                 explodeBullet.SpawnPosition = new Vector2(0, 20);
@@ -73,8 +74,8 @@ public class TriangleCanAttack : InfinitePattern
 
     public override void Execute(InfinitePatternListSO PatternList, List<InfinitePattern> _activePatterns)
     {
+        spawnCount = (int)_scoreManager.GetCurrentTime()/2 + 2;
         StartCoroutine(Spawn(PatternList, _activePatterns));
-        spawnCount = (int)scoreManager.GetCurrentTime()/2 + 2;
     }
 
     public override void ExecuteNextPattern(InfinitePatternListSO PatternList, List<InfinitePattern> _activePatterns)

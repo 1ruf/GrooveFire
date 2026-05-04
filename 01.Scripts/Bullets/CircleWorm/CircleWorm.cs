@@ -6,7 +6,7 @@ namespace KHG.Bullets
     public class CircleWorm : Bullet
     {
         [SerializeField] private float moveSpeed = 10;
-        public float rotationSpeed { get; set; }
+        public float RotationSpeed { get; set; }
 
         private Rigidbody2D _rigid;
         private void Awake()
@@ -15,7 +15,7 @@ namespace KHG.Bullets
         }
         private void Start()
         {
-            _rigid.AddTorque(rotationSpeed);
+            _rigid.AddTorque(RotationSpeed);
         }
         private void FixedUpdate()
         {

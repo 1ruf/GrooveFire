@@ -11,16 +11,16 @@ public class CameraEvent
 }
 public class CameraFocusEvent : GameEvent
 {
-    public Transform target;
-    public float targetSize = 0f;
+    public Transform Target;
+    public float TargetSize = 0f;
 }
 public class CameraFocus : MonoBehaviour
 {
-    [SerializeField] private GameEventChannelSO _cameraChannel;
+    [SerializeField] private GameEventChannelSO cameraChannel;
     [SerializeField] private CinemachineCamera vCam;
     [SerializeField] private float transitionDuration = 2f;
 
-    [Inject] private PoolManagerMono poolManagerMono;
+    [Inject] private PoolManagerMono _poolManagerMono;
 
     private void OnEnable()
     {
@@ -28,17 +28,17 @@ public class CameraFocus : MonoBehaviour
     }
     private void Awake()
     {
-        _cameraChannel.AddListener<CameraFocusEvent>(OnCameraFocus);
+        cameraChannel.AddListener<CameraFocusEvent>(OnCameraFocus);
     }
 
     private void OnDestroy()
     {
-        _cameraChannel.RemoveListener<CameraFocusEvent>(OnCameraFocus);
+        cameraChannel.RemoveListener<CameraFocusEvent>(OnCameraFocus);
     }
 
     private void OnCameraFocus(CameraFocusEvent arg)
     {
-        StartCoroutine(SmoothFocusTransition(arg.target, arg.targetSize));
+        StartCoroutine(SmoothFocusTransition(arg.Target, arg.TargetSize));
     }
 
     private IEnumerator SmoothFocusTransition(Transform target, float targetSize)

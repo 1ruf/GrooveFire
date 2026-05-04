@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SummonerPattern : InfinitePattern
 {
-    [Inject] private InfiniteScoreManager scoreManager;
+    [Inject] private InfiniteScoreManager _scoreManager;
     [SerializeField] private PoolManagerSO poolManager;
     [SerializeField] private PoolingItemSO poolType;
 
@@ -29,7 +29,7 @@ public class SummonerPattern : InfinitePattern
 
     private IEnumerator SummonlAttack(InfinitePatternListSO PatternList, List<InfinitePattern> _activePatterns)
     {
-        _curTime = scoreManager.GetCurrentTime();
+        _curTime = _scoreManager.GetCurrentTime();
             print("½Ã°£:"+_curTime);
         for (int i = 0; i < 3; i++)
         {

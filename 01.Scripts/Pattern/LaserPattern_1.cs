@@ -29,7 +29,7 @@ public class LaserPattern_1 : TimeLinePattern
             {
                 LaserBullet laser = _poolManager.Pop<LaserBullet>(laserItem);
                 laser.transform.position = Vector3.zero;
-                laser.rotation = (angle * j) + 45;
+                laser.Rotation = (angle * j) + 45;
             }
             yield return new WaitForSeconds(0.8f);
         }

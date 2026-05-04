@@ -8,8 +8,8 @@ namespace KHG.Bullets
 {
     public class ExplodeBullet : Bullet
     {
-        [SerializeField] public bool moveable;
-        [SerializeField] public Vector3 targetPosition;
+        [SerializeField] public bool Moveable;
+        [SerializeField] public Vector3 TargetPosition;
         public UnityEvent ActiveEvent;
         public Vector3 SpawnPosition 
         { 
@@ -40,13 +40,14 @@ namespace KHG.Bullets
         public void OnActivated() => ActiveEvent?.Invoke();
         public void DestroySelf()
         {
+            _damageable = false;
             if (_explodePool != null) _explodePool.Push(this);
             else Destroy(gameObject);
         }
         private IEnumerator Move(float t)
         {
             yield return new WaitForSeconds(t);
-            if (moveable) transform.DOMove(targetPosition, 1.5f);
+            if (Moveable) transform.DOMove(TargetPosition, 1.5f);
         }
         public override void SetUpPool(Pool pool)
         {
@@ -56,8 +57,10 @@ namespace KHG.Bullets
         public override void ResetItem()
         {
             transform.DOKill();
+            _damageable = false;
+            Moveable = false;
             SpawnPosition = Vector3.zero;
-            targetPosition = Vector3.zero;
+            TargetPosition = Vector3.zero;
         }
     }
 }

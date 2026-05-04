@@ -38,7 +38,10 @@ namespace KHG.Bullets
 
         private void CalculateAngle()
         {
-            GenerateAngle = AutoAngle ? 360 / (BulletCount - 1) : GenerateAngle;
+            if (AutoAngle && BulletCount > 1)
+            {
+                GenerateAngle = 360f / (BulletCount - 1);
+            }
         }
 
         private IEnumerator Generate()

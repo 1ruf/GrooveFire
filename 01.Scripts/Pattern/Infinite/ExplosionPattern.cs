@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class ExplosionPattern : InfinitePattern
 {
-    [Inject] private InfiniteScoreManager scoreManager;
+    [Inject] private InfiniteScoreManager _scoreManager;
     [SerializeField] private PoolManagerSO poolManager;
     [SerializeField] private PoolingItemSO poolType;
 
@@ -29,14 +29,14 @@ public class ExplosionPattern : InfinitePattern
     private IEnumerator ExplodePattern(InfinitePatternListSO PatternList, List<InfinitePattern> _activePatterns)
     {
         Debug.Log("��ź");
-        _curTime = scoreManager.GetCurrentTime();
+        _curTime = _scoreManager.GetCurrentTime();
         int repeatCnt = (int)(_curTime / 2) + 3;
         for (int i = 1; i <= repeatCnt; i++)
         {
             ExplodeBullet bullet = poolManager.Pop(poolType) as ExplodeBullet;
             bullet.transform.position = Vector3.zero;
-            bullet.moveable = true;
-            bullet.targetPosition = Vector3.zero + new Vector3(Random.Range(-15,15),Random.Range(-7,7));
+            bullet.Moveable = true;
+            bullet.TargetPosition = Vector3.zero + new Vector3(Random.Range(-15,15),Random.Range(-7,7));
 
             float waitTime = _curTime == 0 ? 2 : 1 / _curTime * 2 + 0.5f;
             yield return new WaitForSeconds(waitTime);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Boss_1 : TimeLinePattern
 {
-    [SerializeField] private Animator _bossAnimator;
+    [SerializeField] private Animator bossAnimator;
     [SerializeField] private GameEventChannelSO channel;
     [SerializeField] private AudioClip cilp;
 
@@ -18,6 +18,6 @@ public class Boss_1 : TimeLinePattern
     private void BossSequence()
     {
         channel.RaiseEvent(AudioEvents.AudioChangeEvent.Initializer(AudioType.BGM, cilp, true));
-        _bossAnimator.Play("B1_P1");
+        bossAnimator.Play("B1_P1");
     }
 }

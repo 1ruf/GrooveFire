@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TestPattern : InfinitePattern 
 {
-    [Inject] private InfiniteScoreManager scoreManager;
+    [Inject] private InfiniteScoreManager _scoreManager;
     [SerializeField] private string patternName;
     [SerializeField] private int currentPatternTime;
 
@@ -26,9 +26,9 @@ public class TestPattern : InfinitePattern
     {
         for (int i = 0; i < cnt; i++)
         {
-            float duration = time - scoreManager.GetCurrentTime() / 100;
+            float duration = time - _scoreManager.GetCurrentTime() / 100;
             yield return new WaitForSeconds(duration);
-            print($"{patternName} 실행! : {i},간격:{duration}");
+            print($"{patternName} ?�행! : {i},간격:{duration}");
         }
         ExecuteNextPattern(PatternList, _activePatterns);
     }

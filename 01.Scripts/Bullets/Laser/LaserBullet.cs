@@ -7,7 +7,7 @@ namespace KHG.Bullets
     public class LaserBullet : Bullet
     {
         public UnityEvent ActiveEvent;
-        public float rotation
+        public float Rotation
         {
             get => transform.rotation.z;
             set => transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, value);

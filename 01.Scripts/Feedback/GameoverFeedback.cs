@@ -15,7 +15,7 @@ public class GameoverFeedback : Feedback
 
         if (cameraChannel == null) return;
         CameraFocusEvent evt = CameraEvent.CameraFocusEvent;
-        evt.target = player;
+        evt.Target = player;
         cameraChannel.RaiseEvent(evt);
         Time.timeScale = 0;
     }

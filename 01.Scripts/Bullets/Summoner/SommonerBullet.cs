@@ -36,13 +36,16 @@ namespace KHG.Bullets
         {
             base.OnEnable();
             _originScale = transform.localScale;
+            _isDied = false;
             StartCoroutine(Spawn());
         }
         public override void ResetItem()
         {
+            StopAllCoroutines();
+            _isDied = false;
             _rigid = GetComponent<Rigidbody2D>();
             _generator = GetComponent<CircleGenerate>();
-            DOTween.KillAll(this);
+            transform.DOKill();
         }
 
         public void StartSpawn()

@@ -6,13 +6,12 @@ using GondrLib.Dependencies;
 public class InfiniteScoreManager : MonoBehaviour, IDependencyProvider
 {
     [SerializeField] private ClearPlayerReaderBoard readerBoard;
-    
-    public TextMeshProUGUI timeText;
+    public TextMeshProUGUI TimeText;
 
-    private float startTime;
-    private bool isCounting;
+    private float _startTime;
+    private bool _isCounting;
 
-    private const string SaveKey = "InfiniteModeBestTime";
+    private const string _saveKey = "InfiniteModeBestTime";
 
 
     private void Start()
@@ -21,25 +20,25 @@ public class InfiniteScoreManager : MonoBehaviour, IDependencyProvider
     }
     void Update()
     {
-        if (isCounting)
+        if (_isCounting)
         {
-            float currentElapsedTime = Time.time - startTime;
+            float currentElapsedTime = Time.time - _startTime;
             UpdateTimeUI(currentElapsedTime);
         }
     }
 
     public void CountStart()
     {
-        startTime = Time.time;
-        isCounting = true;
+        _startTime = Time.time;
+        _isCounting = true;
     }
 
     public void CountEnd()
     {
-        if (!isCounting) return;
+        if (!_isCounting) return;
 
-        float finalTime = Time.time - startTime;
-        isCounting = false;
+        float finalTime = Time.time - _startTime;
+        _isCounting = false;
 
         SaveScore(Mathf.RoundToInt(finalTime));
         UpdateTimeUI(finalTime);
@@ -47,31 +46,31 @@ public class InfiniteScoreManager : MonoBehaviour, IDependencyProvider
 
     private void UpdateTimeUI(float time)
     {
-        timeText.text = Mathf.FloorToInt(time).ToString("F0");
+        TimeText.text = Mathf.FloorToInt(time).ToString("F0");
     }
 
-    public void SaveScore(int score) //임시
+    public void SaveScore(int score) //?�시
     {
         int bestScore = LoadScore();
         if (score > bestScore)
         {
-            PlayerPrefs.SetInt(SaveKey, score);
+            PlayerPrefs.SetInt(_saveKey, score);
             PlayerPrefs.Save();
         }
     }
 
-    public int LoadScore() //임시
+    public int LoadScore() //?�시
     {
-        return PlayerPrefs.GetInt(SaveKey, 0);
+        return PlayerPrefs.GetInt(_saveKey, 0);
     }
 
     public float GetCurrentTime()
     {
-        return isCounting ? Time.time - startTime : 0f;
+        return _isCounting ? Time.time - _startTime : 0f;
     }
 
     public void SetReaderBoard()
     {
-        readerBoard.SetClearTime((int)(Time.time - startTime));
+        readerBoard.SetClearTime((int)(Time.time - _startTime));
     }
 }
